@@ -1,0 +1,231 @@
+________________________________________1________________________________________
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.WriteLine("Please start inserting students presence:");
+
+        string input = Console.ReadLine();
+        string[] studentsPresence = input.Split(',');
+
+        int presentCount = 0;
+        int absentCount = 0;
+        int unknownCount = 0;
+
+        foreach (string presence in studentsPresence)
+        {
+            string trimmedPresence = presence.Trim().ToLower();
+
+            switch (trimmedPresence)
+            {
+                case "present":
+                    presentCount++;
+                    break;
+                case "absent":
+                    absentCount++;
+                    break;
+                default:
+                    unknownCount++;
+                    break;
+            }
+        }
+
+        Console.WriteLine($"{presentCount} students are present");
+        Console.WriteLine($"{absentCount} students are absent");
+        Console.WriteLine($"{unknownCount} students presence unknown");
+    }
+}
+
+
+________________________________________2________________________________________
+
+using System;
+using System.Collections.Generic;
+
+class Film
+{
+    private string name;
+    private string director;
+    private int year;
+    private string genre;
+    private List<double> ratings = new List<double>();
+
+    public List<double> Ratings
+    {
+        get { return ratings; }
+        set { ratings = value; }
+    }
+
+    public Film()
+    {
+    }
+
+    public Film(string name, string director, int year, string genre)
+    {
+        this.name = name;
+        this.director = director;
+        this.year = year;
+        this.genre = genre;
+    }
+
+    ~Film()
+    {
+        Console.WriteLine("Destructor called.");
+    }
+
+    public void PrintInfo()
+    {
+        Console.WriteLine($"Name: {name}");
+        Console.WriteLine($"Director: {director}");
+        Console.WriteLine($"Year: {year}");
+        Console.WriteLine($"Genre: {genre}");
+    }
+
+    public virtual void CalculateAverageRating()
+    {
+        double sum = 0;
+        foreach (double rating in ratings)
+        {
+            sum += rating;
+        }
+        double average = sum / ratings.Count;
+        Console.WriteLine($"Average Rating: {average:f2}");
+    }
+}
+
+class Rating : Film
+{
+    public Rating(string name, string director, int year, string genre) : base(name, director, year, genre)
+    {
+    }
+
+    public override void CalculateAverageRating()
+    {
+        base.CalculateAverageRating();
+    }
+
+    public void PrintRatings()
+    {
+        Console.WriteLine("Film Ratings:");
+        foreach (double rating in Ratings)
+        {
+            Console.WriteLine(rating);
+        }
+    }
+}
+
+interface IBoxOffice
+{
+    void PrintEarnings();
+}
+
+class BoxOffice : IBoxOffice
+{
+    private List<double> allEarnings = new List<double>();
+
+    public void PrintEarnings()
+    {
+        Console.WriteLine("Film's earnings:");
+        foreach (double earning in allEarnings)
+        {
+            Console.WriteLine(earning);
+        }
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.WriteLine("Please insert Film Name:");
+        string name = Console.ReadLine();
+
+        Console.WriteLine("Please insert Film Director:");
+        string director = Console.ReadLine();
+
+        Console.WriteLine("Please insert film year:");
+        int year = int.Parse(Console.ReadLine());
+
+        Console.WriteLine("Please insert film genre:");
+        string genre = Console.ReadLine();
+
+        Rating film = new Rating(name, director, year, genre);
+
+        Console.WriteLine("Please start inserting film ratings between 0 and 5. To stop, please insert \"/\":");
+
+        while (true)
+        {
+            string input = Console.ReadLine();
+            if (input == "/")
+                break;
+
+            double rating;
+            if (double.TryParse(input, out rating))
+            {
+                if (rating < 0 || rating > 5)
+                {
+                    Console.WriteLine("You have entered incorrect rating. Allowed rating should be between 0 and 5!");
+                }
+                else
+                {
+                    film.Ratings.Add(rating);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a valid rating.");
+            }
+        }
+
+        Console.WriteLine("\nOutput:");
+        film.PrintInfo();
+        film.CalculateAverageRating();
+    }
+}
+
+
+________________________________________3________________________________________
+
+using System;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.WriteLine("Please start inserting arrays:");
+        int n = int.Parse(Console.ReadLine());
+
+        int[] products = new int[n];
+
+        for (int i = 0; i < n; i++)
+        {
+            Console.WriteLine($"Enter size of array {i + 1}:");
+            int size = int.Parse(Console.ReadLine());
+
+            if (size <= 0)
+            {
+                Console.WriteLine("Invalid size. Skipping array.");
+                continue;
+            }
+
+            Console.WriteLine($"Enter {size} elements for array {i + 1}:");
+            string[] inputArray = Console.ReadLine().Split(' ');
+
+            int element;
+            if (int.TryParse(inputArray[i], out element))
+            {
+                products[i] = element;
+            }
+        }
+
+        int productResult = 1;
+        foreach (int element in products)
+        {
+            productResult *= element;
+        }
+
+        Console.WriteLine($"Output: {productResult}");
+    }
+}
